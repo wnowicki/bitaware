@@ -10,10 +10,13 @@ dynamic = ["version"]
 requires-python = ">=3.10"
 readme = "README.md"
 license = { file = "LICENSE.md"}
+dependencies = [
+    "pydantic>=2.11.4",
+]
 
 [project.urls]
-"Homepage" = "https://github.com/wnowicki/bitwise"
-"Source" = "https://github.com/wnowicki/bitwise"
+"Homepage" = "https://github.com/wnowicki/bitaware"
+"Source" = "https://github.com/wnowicki/bitaware"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

@@ -9,12 +9,47 @@ Bitwise Toolbox
 [![markdown](https://github.com/wnowicki/bitaware/workflows/Markdown%20Lint/badge.svg)](https://github.com/wnowicki/bitaware/actions?query=branch%3Amain)
 [![License: GPLv3](https://img.shields.io/badge/License-MIT-blue.svg)](https://license.md/licenses/mit-license/)
 
-## Setup
+## Usage
+
+### Define
+
+```python
+from bitaware import BitFlag, BitwiseAware
+
+class PermissionTypes(BitFlag):
+    ADMIN = 1
+    USER = 2
+    GUEST = 4
+    MODERATOR = 8
+
+class UserPermission(BitwiseAware[PermissionTypes]):
+    def __init__(self, value: int):
+        super().__init__(value, PermissionTypes)
+    pass
+```
+
+### Use
+
+Standalone:
+
+```python
+permission = UserPermission(Types.ADMIN | Types.USER)
+
+print(perm.has(Types.ADMIN))  # True
+print(perm.has(Types.GUEST))  # False
+```
+
+As Pydantic field:
+
+```python
+class User(BaseModel):
+    permissions: UserPermission
+```
 
 ## Test
 
 ```shell
-pytest
+uv run pytest
 ```
 
 ## Security
