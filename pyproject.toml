@@ -3,16 +3,17 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pytemp"
-description = "A simple Python package template"
+name = "bitwise"
+description = "Bitwise support for configuration"
+authors = [{name = "Wojciech Nowicki", email="wnowicki@me.com"}]
 dynamic = ["version"]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 readme = "README.md"
 license = { file = "LICENSE.md"}
 
 [project.urls]
-"Homepage" = "https://github.com/wnowicki/pytemp"
-"Source" = "https://github.com/wnowicki/pytemp"
+"Homepage" = "https://github.com/wnowicki/bitwise"
+"Source" = "https://github.com/wnowicki/bitwise"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -21,9 +22,6 @@ testpaths = [
     "tests",
 ]
 pythonpath = "."
-
-[project.scripts]
-my_app = "app.main:main"
 
 [tool.ruff]
 
