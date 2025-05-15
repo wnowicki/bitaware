@@ -14,7 +14,7 @@ Bitwise Toolbox
 ### Define
 
 ```python
-from bitaware import BitFlag, BitwiseAware
+from bitaware import BitFlag, BitAware
 
 class PermissionTypes(BitFlag):
     ADMIN = 1
@@ -22,7 +22,7 @@ class PermissionTypes(BitFlag):
     GUEST = 4
     MODERATOR = 8
 
-class UserPermission(BitwiseAware[PermissionTypes]):
+class UserPermission(BitAware[PermissionTypes]):
     def __init__(self, value: int):
         super().__init__(value, PermissionTypes)
     pass
@@ -33,10 +33,10 @@ class UserPermission(BitwiseAware[PermissionTypes]):
 Standalone:
 
 ```python
-permission = UserPermission(Types.ADMIN | Types.USER)
+permission = UserPermission(PermissionTypes.ADMIN | PermissionTypes.USER)
 
-print(perm.has(Types.ADMIN))  # True
-print(perm.has(Types.GUEST))  # False
+print(permission.has(PermissionTypes.ADMIN))  # True
+print(permission.has(PermissionTypes.GUEST))  # False
 ```
 
 As Pydantic field:

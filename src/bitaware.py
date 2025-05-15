@@ -8,11 +8,11 @@ class BitFlagMeta(EnumMeta):
     def is_power_of_two(n):
         return n > 0 and (n & (n - 1)) == 0
 
-    def __new__(metacls, cls, bases, classdict):
+    def __new__(mcs, cls, bases, classdict):
         for name, value in classdict.items():
-            if not name.startswith("_") and not metacls.is_power_of_two(value):
+            if not name.startswith("_") and not mcs.is_power_of_two(value):
                 raise ValueError(f"Value {value} for '{name}' is not a power of 2")
-        return super().__new__(metacls, cls, bases, classdict)
+        return super().__new__(mcs, cls, bases, classdict)
 
 
 class BitFlag(IntFlag, metaclass=BitFlagMeta):
@@ -20,8 +20,6 @@ class BitFlag(IntFlag, metaclass=BitFlagMeta):
     A class that represents a bit flag, allowing for bitwise operations
     and enumeration of flags.
     """
-
-    pass
 
 
 BaseFlag = TypeVar("BaseFlag", bound=BitFlag)
