@@ -1,4 +1,4 @@
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, Type
 from enum import IntFlag, EnumMeta
 from pydantic_core import core_schema
 
@@ -31,7 +31,7 @@ class BitAware(int, Generic[BaseFlag]):
     and flag management.
     """
 
-    def __init__(self, value: int, flags: BaseFlag = None):
+    def __init__(self, value: int, flags: Type[BaseFlag] = None):
         self.flags = flags
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Value must be a positive integer.")
