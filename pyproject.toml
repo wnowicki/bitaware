@@ -18,6 +18,9 @@ dependencies = [
 "Homepage" = "https://github.com/wnowicki/bitaware"
 "Source" = "https://github.com/wnowicki/bitaware"
 
+[tool.pdm]
+version = {source = "scm"}
+
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
