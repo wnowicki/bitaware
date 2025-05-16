@@ -31,11 +31,11 @@ class BitAware(int, Generic[BaseFlag]):
     and flag management.
     """
 
-    def __init__(self, value: int, flags: BaseFlag):
+    def __init__(self, value: int, flags: BaseFlag = None):
         self.flags = flags
         if not isinstance(value, int) or value <= 0:
             raise ValueError("Value must be a positive integer.")
-        if value > self.__sum_flags():
+        if flags and value > self.__sum_flags():
             raise ValueError(f"Value {value} exceeds the possible flag setup.")
         self.value = value
 
