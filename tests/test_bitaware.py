@@ -49,7 +49,7 @@ def test_bitaware_has_flag():
 
 def test_bitaware_repr_and_int():
     b = MyBit(2)
-    assert repr(b) == "2"
+    assert repr(b) == "MyBit(MyFlags.FLAG_B)"
     assert int(b) == 2
 
 
@@ -89,5 +89,5 @@ def test_bitaware_validate_bitaware():
 def test_bitaware_validate_invalid():
     with pytest.raises(ValueError):
         BitAware.validate(-1)
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         BitAware.validate("bad")

@@ -1,3 +1,4 @@
+import inspect
 from typing import Any, Generic, TypeVar, Type
 from enum import IntFlag, EnumMeta
 from pydantic_core import core_schema
@@ -45,7 +46,31 @@ class BitAware(int, Generic[BaseFlag]):
     def __int__(self):
         return self.value
 
+    def __iter__(self):
+        if self.flags:
+            for flag in self.flags:
+                if self.has(flag):
+                    yield flag
+        else:
+            yield self.value
+
     def __repr__(self):
+        if self.flags:
+            flag_names = [
+                f"{self.flags.__name__}.{flag.name}" for flag in self.flags if self.has(flag)
+            ]
+            return f"{self.__class__.__name__}({' | '.join(flag_names)})"
+        return f"{self.__class__.__name__}({self.value})"
+
+    def __str__(self):
+        if self.flags:
+            flag_names = [flag.name for flag in self.flags if self.has(flag)]
+            label = self.value
+            if self.value in self.flags:
+                label = self.flags(self.value).name
+            if self.value in self.properties():
+                label = self.properties()[self.value]
+            return f"{label} [{', '.join(flag_names)}]"
         return str(self.value)
 
     def __eq__(self, other: Any) -> bool:
@@ -66,6 +91,18 @@ class BitAware(int, Generic[BaseFlag]):
     def validate(cls, value: Any) -> "BitAware":
         if isinstance(value, cls):
             return value
-        if not isinstance(value, int) or value <= 0:
+        if not isinstance(value, int):
+            raise TypeError(f"Expected int, got {type(value).__name__}")
+        if value <= 0:
             raise ValueError("Value must be a positive integer.")
         return cls(value)
+
+    def properties(self) -> dict[int, str]:
+        """
+        Returns a dictionary of properties with their values.
+        """
+        return {
+            value: name
+            for name, value in inspect.getmembers(self, lambda x: isinstance(x, int))
+            if not name.startswith("_") and name.isupper()
+        }
