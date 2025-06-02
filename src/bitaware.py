@@ -68,8 +68,8 @@ class BitAware(int, Generic[BaseFlag]):
             label = self.value
             if self.value in self.flags:
                 label = self.flags(self.value).name
-            if self.value in self.properties():
-                label = self.properties()[self.value]
+            if self.value in self.__class__.properties():
+                label = self.__class__.properties()[self.value]
             return f"{label} [{', '.join(flag_names)}]"
         return str(self.value)
 
@@ -97,12 +97,13 @@ class BitAware(int, Generic[BaseFlag]):
             raise ValueError("Value must be a positive integer.")
         return cls(value)
 
-    def properties(self) -> dict[int, str]:
+    @classmethod
+    def properties(cls) -> dict[int, str]:
         """
         Returns a dictionary of properties with their values.
         """
         return {
             value: name
-            for name, value in inspect.getmembers(self, lambda x: isinstance(x, int))
+            for name, value in inspect.getmembers(cls, lambda x: isinstance(x, int))
             if not name.startswith("_") and name.isupper()
         }
