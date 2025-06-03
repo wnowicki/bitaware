@@ -16,33 +16,87 @@ Bitwise Toolbox
 from bitaware import BitFlag, BitAware
 
 class PermissionTypes(BitFlag):
-    ADMIN = 1
-    USER = 2
-    GUEST = 4
-    MODERATOR = 8
+    READ = 1
+    CREATE = 2
+    EDIT = 4
+    ADMIN = 8
+
 
 class UserPermission(BitAware[PermissionTypes]):
     def __init__(self, value: int):
         super().__init__(value, PermissionTypes)
+
     pass
+
+    # "User Roles" Named sets can be used interchangeably
+    READER = PermissionTypes.READ
+    CREATOR = PermissionTypes.CREATE | PermissionTypes.READ
+    EDITOR = PermissionTypes.EDIT | PermissionTypes.READ
 ```
 
-### Use
+### Simple Use
 
 Standalone:
 
 ```python
-permission = UserPermission(PermissionTypes.ADMIN | PermissionTypes.USER)
+permission = UserPermission(PermissionTypes.ADMIN | PermissionTypes.READ)
 
 print(permission.has(PermissionTypes.ADMIN))  # True
-print(permission.has(PermissionTypes.GUEST))  # False
+print(permission.has(PermissionTypes.CREATE))  # False
 ```
+
+### Pydantic
 
 As Pydantic field:
 
 ```python
 class User(BaseModel):
+    name: str
     permissions: UserPermission
+```
+
+Usage
+
+```python
+user = User(name="test_user", permissions=UserPermission.READER)
+admin = User(name="admin_user", permissions=PermissionTypes.READ | PermissionTypes.ADMIN)
+
+print(user.model_dump_json(indent=2))
+```
+
+Above code will print:
+
+```json
+{
+  "name": "test_user",
+  "permissions": 1
+}
+```
+
+### Misc
+
+```python
+x = UserPermission(12)
+
+print(str(x)) # EDIT|ADMIN [EDIT, ADMIN]
+print(repr(x)) # UserPermission(PermissionTypes.EDIT | PermissionTypes.ADMIN)
+print(list(x)) # [<PermissionTypes.EDIT: 4>, <PermissionTypes.ADMIN: 8>]
+```
+
+For predefined named flag set:
+
+```python
+x = UserPermission(UserPermission.CREATOR)
+
+print(str(x)) # CREATOR [READ, CREATE]
+print(repr(x)) # UserPermission(PermissionTypes.READ | PermissionTypes.CREATE)
+print(list(x)) # [<PermissionTypes.READ: 1>, <PermissionTypes.CREATE: 2>]
+```
+
+Predefined named flag sets:
+
+```python
+print(UserPermission.properties()) # {<PermissionTypes.READ|CREATE: 3>: 'CREATOR', <PermissionTypes.READ|EDIT: 5>: 'EDITOR', <PermissionTypes.READ: 1>: 'READER'}
 ```
 
 ## Test
