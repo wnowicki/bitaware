@@ -23,11 +23,18 @@ version = {source = "scm"}
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q"
+addopts = "-ra -q --cov=src --cov-report xml:coverage.xml --cov-report term"
 testpaths = [
     "tests",
 ]
 pythonpath = "."
+
+[tool.coverage.run]
+
+omit = [
+    "*/__init__.py",
+    "alembic/*",
+]
 
 [tool.ruff]
 
@@ -53,5 +60,6 @@ unfixable = ["B"]
 dev = [
     "pre-commit",
     "pytest",
+    "pytest-cov",
     "ruff",
 ]
