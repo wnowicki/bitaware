@@ -10,10 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `__str__`, `__repr__` and `__iter__` to **BitAware** [#3](https://github.com/wnowicki/bitaware/issues/3)
+- Defined Flags to `BitAware`
 
 ### Changed
 
 - Publish action - removed test part
+
+### Removed
+
+- UV lock file
 
 ## 0.1.1 - 2025-05-16
 
