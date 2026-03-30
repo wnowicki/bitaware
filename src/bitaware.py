@@ -1,5 +1,5 @@
 import inspect
-from typing import Any, Generic, TypeVar, Type
+from typing import Any, Generic, NamedTuple, TypeVar, Type
 from enum import IntFlag, EnumMeta
 from pydantic_core import core_schema
 
@@ -21,6 +21,11 @@ class BitFlag(IntFlag, metaclass=BitFlagMeta):
     A class that represents a bit flag, allowing for bitwise operations
     and enumeration of flags.
     """
+
+
+class DefinedFlag(NamedTuple):
+    name: str
+    value: int
 
 
 BaseFlag = TypeVar("BaseFlag", bound=BitFlag)
@@ -107,3 +112,16 @@ class BitAware(int, Generic[BaseFlag]):
             for name, value in inspect.getmembers(cls, lambda x: isinstance(x, int))
             if not name.startswith("_") and name.isupper()
         }
+
+    @classmethod
+    def defined_flags(cls) -> list[DefinedFlag]:
+        """Returns a list of defined constants in the BitAware class.
+
+        Returns:
+            List of DefinedFlag instances containing the name and value of each defined constant.
+        """
+        return [
+            DefinedFlag(name=name, value=value.value)
+            for name, value in cls.__dict__.items()
+            if not name.startswith("_") and isinstance(value, int)
+        ]
