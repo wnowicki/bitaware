@@ -1,5 +1,5 @@
 import pytest
-from bitaware import BitFlag, BitAware
+from bitaware import BitFlag, BitAware, DefinedFlag
 
 
 class MyFlags(BitFlag):
@@ -9,6 +9,10 @@ class MyFlags(BitFlag):
 
 
 class MyBit(BitAware[MyFlags]):
+    OPTION_ONE = MyFlags.FLAG_A
+    OPTION_TWO = MyFlags.FLAG_B | MyFlags.FLAG_A
+    OPTION_THREE = MyFlags.FLAG_C | MyFlags.FLAG_B | MyFlags.FLAG_A
+
     def __init__(self, value: int):
         super().__init__(value, MyFlags)
 
@@ -91,3 +95,17 @@ def test_bitaware_validate_invalid():
         BitAware.validate(-1)
     with pytest.raises(TypeError):
         BitAware.validate("bad")
+
+
+def test_bitaware_defined_flags():
+    b = MyBit.defined_flags()
+
+    assert isinstance(b, list)
+    assert all(isinstance(flag, DefinedFlag) for flag in b)
+    assert len(b) == 3
+    assert b[0].name == "OPTION_ONE"
+    assert b[1].name == "OPTION_TWO"
+    assert b[2].name == "OPTION_THREE"
+    assert b[0].value == 1
+    assert b[1].value == 3
+    assert b[2].value == 7
