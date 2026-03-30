@@ -121,7 +121,7 @@ class BitAware(int, Generic[BaseFlag]):
             List of DefinedFlag instances containing the name and value of each defined constant.
         """
         return [
-            DefinedFlag(name=name, value=value.value)
+            DefinedFlag(name=name, value=int(value))
             for name, value in cls.__dict__.items()
-            if not name.startswith("_") and isinstance(value, int)
+            if not name.startswith("_") and name.isupper() and isinstance(value, int)
         ]

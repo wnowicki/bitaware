@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `__str__`, `__repr__` and `__iter__` to **BitAware** [#3](https://github.com/wnowicki/bitaware/issues/3)
-- Defined Flags to `BitAware`
+- Added defined flags support to **BitAware**
 
 ### Changed
 
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- UV lock file
+- Removed `uv.lock` lock file (locked installs are no longer supported).
 
 ## 0.1.1 - 2025-05-16
 
