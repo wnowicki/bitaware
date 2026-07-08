@@ -68,14 +68,6 @@ class BitAware(int, Generic[BaseFlag]):
         return f"{self.__class__.__name__}({self.value})"
 
     def __str__(self):
-        if self.flags:
-            flag_names = [flag.name for flag in self.flags if self.has(flag)]
-            label = self.value
-            if self.value in self.flags:
-                label = self.flags(self.value).name
-            if self.value in self.__class__.properties():
-                label = self.__class__.properties()[self.value]
-            return f"{label} [{', '.join(flag_names)}]"
         return str(self.value)
 
     def __eq__(self, other: Any) -> bool:
@@ -87,6 +79,17 @@ class BitAware(int, Generic[BaseFlag]):
 
     def __sum_flags(self) -> int:
         return sum(flag.value for flag in self.flags)
+
+    def explain(self) -> str:
+        if self.flags:
+            flag_names = [flag.name for flag in self.flags if self.has(flag)]
+            label = self.value
+            if self.value in self.flags:
+                label = self.flags(self.value).name
+            if self.value in self.__class__.properties():
+                label = self.__class__.properties()[self.value]
+            return f"{label} [{', '.join(flag_names)}]"
+        return str(self.value)
 
     @classmethod
     def __get_pydantic_core_schema__(cls, _source, handler):
